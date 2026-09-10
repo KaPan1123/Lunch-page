@@ -81,11 +81,12 @@
   }
   h1 {
     color: #fff;
-    font-size: clamp(30px, 6vw, 56px);
+    font-size: clamp(38px, 7.5vw, 76px);
     font-weight: 900;
     text-align: center;
     text-shadow: 0 4px 16px rgba(0,0,0,.45);
     z-index: 1;
+    margin-top: 3vh;
   }
 
   .colonel-wrap {
@@ -237,7 +238,7 @@
   </div>
 
   <div class="stage">
-    <h1>今天吃什么？</h1>
+    <h1>明天中午吃什么</h1>
     <div class="colonel-wrap">
       <svg viewBox="0 0 400 500" aria-label="KFC老爷爷">
         <defs>
@@ -355,10 +356,24 @@
     other.style.position = 'fixed';
     other.style.margin = '0';
     var margin = 16;
-    var maxX = window.innerWidth - other.offsetWidth * otherScale - margin;
-    var maxY = window.innerHeight - other.offsetHeight * otherScale - margin;
-    other.style.left = (margin + Math.random() * Math.max(margin, maxX)) + 'px';
-    other.style.top = (margin + Math.random() * Math.max(margin, maxY)) + 'px';
+    var w = other.offsetWidth * otherScale;
+    var h = other.offsetHeight * otherScale;
+    var maxX = window.innerWidth - w - margin;
+    var maxY = window.innerHeight - h - margin;
+    var kfcRect = kfc.getBoundingClientRect();
+    var pad = 12;
+    var x, y, tries = 0;
+    do {
+      x = margin + Math.random() * Math.max(margin, maxX);
+      y = margin + Math.random() * Math.max(margin, maxY);
+      tries++;
+    } while (
+      tries < 20 &&
+      x < kfcRect.left + kfcRect.width + pad && x + w + pad > kfcRect.left &&
+      y < kfcRect.top + kfcRect.height + pad && y + h + pad > kfcRect.top
+    );
+    other.style.left = x + 'px';
+    other.style.top = y + 'px';
 
     kfcScale = Math.min(2.6, kfcScale * 1.12);
     kfc.style.transform = 'scale(' + kfcScale + ')';
